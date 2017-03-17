@@ -1,0 +1,33 @@
+version: "3"
+services:
+    app:
+        working_dir: /var/www
+        build: .
+        volumes:
+            - .:/var/www/lumen
+        links:
+            - db
+        depends_on:
+            - db
+        entrypoint: /var/www/entrypoint.sh
+        environment: 
+            - DB_DATABASE=$DB_NAME
+            - DB_USER=$DB_USER
+            - DB_PASSWORD=$DB_PASSWORD
+    nginx:
+        image: nginx
+        volumes:
+            - .:/var/www/lumen
+            - ./nginx.conf:/etc/nginx/
+        ports:
+            - "8080:80"
+    db:
+        image: postgres
+        environment: 
+            - POSTGRES_DB=$DB_NAME
+            - POSTGRES_USER=$DB_USER
+            - POSTGRES_PASSWORD=$DB_PASSWORD
+        volumes:
+            - "./data:/var/lib/postgresql/data"
+        ports:
+            - "5432:5432"
