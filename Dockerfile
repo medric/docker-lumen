@@ -25,6 +25,4 @@ RUN curl -o /tmp/composer-setup.php https://getcomposer.org/installer \
 RUN php /tmp/composer-setup.php --install-dir=/bin --filename=composer \
     && rm -rf /tmp/composer-setup.php /tmp/composer-setup.sig
 
-RUN chown -R www-data:www-data \
-        /var/www/storage \
-        /var/www/bootstrap/cache
+ADD ./entrypoint.sh /var/www/blog

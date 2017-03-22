@@ -1,26 +1,29 @@
 version: "3"
 services:
     app:
-        working_dir: /var/www
+        working_dir: /var/www/blog
         build: .
         volumes:
-            - .:/var/www/lumen
+            - ./blog:/var/www/blog
         links:
             - db
         depends_on:
             - db
-        entrypoint: /var/www/entrypoint.sh
+        entrypoint: ./entrypoint.sh
         environment: 
             - DB_DATABASE=$DB_NAME
             - DB_USER=$DB_USER
             - DB_PASSWORD=$DB_PASSWORD
     nginx:
+        working_dir: /var/www
         image: nginx
         volumes:
-            - .:/var/www/lumen
-            - ./nginx.conf:/etc/nginx/
+            - ./blog:/var/www/lumen
+            - ./nginx.conf:/etc/nginx/conf.d/default.conf
+        links:
+            - app
         ports:
-            - "8080:80"
+            - "8081:80"
     db:
         image: postgres
         environment: 

@@ -1,4 +1,5 @@
 #!/bin/sh
+chmod +x ./entrypoint.sh
 
 rm -rf vendor
 composer install
